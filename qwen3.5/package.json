@@ -1,0 +1,13 @@
+{
+  "name": "glassmorphic-web-synth-piano",
+  "version": "1.0.0",
+  "description": "A 5-octave glassmorphic web synthesizer piano with Tone.js",
+  "scripts": {
+    "test": "node test-piano.js",
+    "start": "npx http-server -p 8080 -c-1"
+  },
+  "devDependencies": {
+    "puppeteer": "^23.0.0",
+    "http-server": "^14.1.1"
+  }
+}

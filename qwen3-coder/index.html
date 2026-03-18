@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glassmorphism Synthesizer Piano</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Top: Instrument selector and master volume -->
+        <div class="header glass-panel">
+            <div class="control-group">
+                <label for="instrument-select">Instrument</label>
+                <select id="instrument-select" class="glass-dropdown">
+                    <option value="rhodes">Fender Rhodes</option>
+                    <option value="wurlitzer">Wurlitzer EP</option>
+                    <option value="cp70">Yamaha CP-70</option>
+                    <option value="cp80">Yamaha CP-80</option>
+                    <option value="clavinet">Hohner Clavinet</option>
+                    <option value="pianet">Hohner Pianet</option>
+                    <option value="juno">Juno 106</option>
+                    <option value="electra">RMI Electra-piano</option>
+                    <option value="dx7">Yamaha DX7</option>
+                    <option value="nord">Clavia Nord Stage 4</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="master-volume">Master Volume</label>
+                <input type="range" id="master-volume" min="0" max="100" value="80" class="glass-slider">
+            </div>
+            <div class="control-group">
+                <label for="reverb-wet">Reverb</label>
+                <input type="range" id="reverb-wet" min="0" max="100" value="30" class="glass-slider">
+            </div>
+            <div class="control-group">
+                <label for="delay-wet">Delay</label>
+                <input type="range" id="delay-wet" min="0" max="100" value="20" class="glass-slider">
+            </div>
+        </div>
+
+        <!-- Middle: Swipeable ribbon with octave range -->
+        <div class="ribbon-container glass-panel" id="ribbon">
+            <div class="arrow left-arrow" id="arrow-left">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+            </div>
+            <div class="ribbon-content" id="ribbon-content">
+                <span class="octave-display">Current: C3 - B3</span>
+            </div>
+            <div class="arrow right-arrow" id="arrow-right">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Bottom: Piano chassis with keys -->
+        <div class="piano-chassis glass-panel">
+            <div class="keyboard" id="keyboard">
+                <!-- Keys will be rendered dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Tone.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

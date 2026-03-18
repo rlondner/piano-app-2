@@ -1,0 +1,230 @@
+:root {
+    --bg-gradient: radial-gradient(circle at center, #2b1055, #120c29);
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.18);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    --text-color: rgba(255, 255, 255, 0.9);
+    --key-white-bg: rgba(255, 255, 255, 0.9);
+    --key-black-bg: rgba(10, 10, 10, 0.95);
+    --key-active-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    --white-key-width-mobile: calc(100vw / 7);
+    --white-key-width-desktop: calc(100vw / 14);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg-gradient);
+    color: var(--text-color);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+#start-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: opacity 0.5s ease;
+}
+
+#start-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.overlay-content {
+    text-align: center;
+    color: white;
+}
+
+.app-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px 0;
+    box-sizing: border-box;
+}
+
+/* Glassmorphism Components */
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    border-radius: 10px;
+}
+
+header {
+    margin: 0 20px;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.glass-select {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.glass-select option {
+    background: #2b1055;
+    color: white;
+}
+
+/* Ribbon Navigation */
+.ribbon-container {
+    margin: 10px 20px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.ribbon-content {
+    flex-grow: 1;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.nav-arrow {
+    background: none;
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s, transform 0.2s;
+    z-index: 10;
+}
+
+.nav-arrow:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.nav-arrow svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Piano Viewport */
+.piano-viewport {
+    flex-grow: 1;
+    margin: 10px 0 0 0; /* Remove side margins to span full width */
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px 10px 0 0;
+    border-bottom: none;
+}
+
+.piano-strip {
+    display: flex;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); /* Smooth slide */
+}
+
+/* Keys */
+.key {
+    position: relative;
+    cursor: pointer;
+    border-radius: 0 0 5px 5px;
+    transition: background-color 0.1s, transform 0.05s, box-shadow 0.1s;
+    user-select: none;
+}
+
+.key.white {
+    background: var(--key-white-bg);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-top: none;
+    z-index: 1;
+    height: 100%;
+}
+
+.key.black {
+    background: var(--key-black-bg);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    z-index: 2;
+    height: 65%;
+    position: absolute;
+    /* Transformations for positioning black keys happen in JS or via specific classes */
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+}
+
+/* Key Active States */
+.key.active {
+    transform: translateY(2px) scale(0.98);
+}
+
+.key.white.active {
+    background: linear-gradient(to bottom, #ddd, #fff);
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.2), var(--key-active-shadow);
+}
+
+.key.black.active {
+    background: #333;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), var(--key-active-shadow);
+}
+
+/* Responsive Key Sizing */
+/* Mobile Portrait: 1 Octave (7 white keys) visible */
+@media (max-width: 767px) {
+    .key.white {
+        width: var(--white-key-width-mobile);
+    }
+    .key.black {
+        width: calc(var(--white-key-width-mobile) * 0.6);
+        /* Black key logic: placed between white keys */
+        /* This requires careful positioning logic in JS or complex CSS nth-child */
+        /* We'll use absolute positioning relative to the previous white key in JS generation */
+    }
+}
+
+/* Desktop/Landscape: 2 Octaves (14 white keys) visible */
+@media (min-width: 768px) {
+    .key.white {
+        width: var(--white-key-width-desktop);
+    }
+    .key.black {
+        width: calc(var(--white-key-width-desktop) * 0.6);
+    }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "glass-synth-piano",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:ui": "node ./test-ui.mjs"
+  },
+  "devDependencies": {
+    "puppeteer": "^24.7.1"
+  }
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Glass Synth Piano</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://unpkg.com/tone@15.1.22/build/Tone.js"></script>
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="glass panel topbar">
+        <div class="brand-block">
+          <p class="eyebrow">Responsive Web Audio Instrument</p>
+          <h1>Glass Synth Piano</h1>
+        </div>
+        <div class="controls">
+          <label class="glass select-wrap">
+            <span class="control-label">Preset</span>
+            <select id="preset-select" aria-label="Instrument preset"></select>
+          </label>
+          <div class="glass status-card">
+            <span class="control-label">Mode</span>
+            <span id="layout-label">Loading</span>
+          </div>
+          <div class="glass status-card hint-card">
+            <span class="control-label">Input</span>
+            <span>Tap, click, or use `A W S E D F T G Y H U J K`</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="glass panel keyboard-panel">
+        <div
+          class="glass ribbon"
+          id="octave-ribbon"
+          aria-label="Octave navigation ribbon"
+          tabindex="0"
+        >
+          <span class="arrow" aria-hidden="true">&#x2039;</span>
+          <div class="ribbon-copy">
+            <p class="control-label">Swipeable Ribbon</p>
+            <strong id="range-label">Current: C2 - B3</strong>
+          </div>
+          <span class="arrow" aria-hidden="true">&#x203A;</span>
+        </div>
+
+        <div class="piano-shell glass" id="piano-shell">
+          <div class="piano-viewport" id="piano-viewport">
+            <div class="key-rail" id="key-rail" aria-label="5 octave piano keyboard"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

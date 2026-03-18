@@ -1,0 +1,354 @@
+:root {
+  /* Glassmorphism variables */
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  --backdrop-blur: blur(10px);
+
+  /* Key dimensions - desktop */
+  --white-key-width-desktop: 50px;
+  --white-key-height-desktop: 200px;
+  --black-key-width-desktop: 30px;
+  --black-key-height-desktop: 120px;
+
+  /* Key dimensions - mobile */
+  --white-key-width-mobile: 36px;
+  --white-key-height-mobile: 140px;
+  --black-key-width-mobile: 22px;
+  --black-key-height-mobile: 84px;
+
+  /* Colors */
+  --white-key-color: rgba(255, 255, 255, 0.9);
+  --black-key-color: rgba(0, 0, 0, 0.8);
+  --active-key-color: rgba(100, 180, 255, 0.6);
+  --text-color: rgba(255, 255, 255, 0.9);
+
+  /* Spacing */
+  --container-padding: 20px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  color: var(--text-color);
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--container-padding);
+}
+
+/* Header */
+.header {
+  background: var(--glass-bg);
+  backdrop-filter: var(--backdrop-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--glass-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.header h1 {
+  font-size: 1.8rem;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.control-group label {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.control-group select {
+  background: var(--glass-bg);
+  backdrop-filter: var(--backdrop-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: var(--text-color);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.control-group input[type="range"] {
+  width: 120px;
+  cursor: pointer;
+}
+
+/* Piano Container */
+.piano-container {
+  background: var(--glass-bg);
+  backdrop-filter: var(--backdrop-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--glass-shadow);
+  margin-bottom: 20px;
+}
+
+/* Ribbon Navigation */
+.ribbon-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: var(--backdrop-blur);
+  border-radius: 12px;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  cursor: grab;
+  user-select: none;
+  transition: opacity 0.2s;
+}
+
+.ribbon-container:active {
+  cursor: grabbing;
+  opacity: 0.8;
+}
+
+.nav-btn {
+  background: var(--glass-bg);
+  backdrop-filter: var(--backdrop-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  padding: 8px 16px;
+  color: var(--text-color);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.nav-btn:active {
+  transform: scale(0.95);
+}
+
+.octave-display {
+  font-size: 1.1rem;
+  font-weight: 600;
+  min-width: 120px;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+/* Keyboard */
+.keyboard {
+  display: flex;
+  position: relative;
+  height: var(--white-key-height-desktop);
+  overflow: hidden;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 5px;
+}
+
+.keys-wrapper {
+  display: flex;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+/* White Keys */
+.white-key {
+  width: var(--white-key-width-desktop);
+  height: var(--white-key-height-desktop);
+  background: var(--white-key-color);
+  backdrop-filter: var(--backdrop-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 0 0 8px 8px;
+  margin: 0 2px;
+  cursor: pointer;
+  transition: all 0.1s;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.white-key:hover {
+  background: rgba(255, 255, 255, 1);
+}
+
+.white-key.active {
+  background: var(--active-key-color);
+  transform: translateY(2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.white-key[data-note="C"] {
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Black Keys Container */
+.black-keys-container {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  right: 0;
+  height: var(--black-key-height-desktop);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Black Keys */
+.black-key {
+  width: var(--black-key-width-desktop);
+  height: var(--black-key-height-desktop);
+  background: var(--black-key-color);
+  backdrop-filter: var(--backdrop-blur);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0 0 6px 6px;
+  position: absolute;
+  cursor: pointer;
+  transition: all 0.1s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  pointer-events: auto;
+}
+
+.black-key:hover {
+  background: rgba(20, 20, 20, 0.9);
+}
+
+.black-key.active {
+  background: var(--active-key-color);
+  transform: translateY(2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Black key positioning using CSS custom properties */
+.black-key[data-offset="0"] { left: calc(var(--white-key-width-desktop) - var(--black-key-width-desktop) * 0.5); }
+.black-key[data-offset="1"] { left: calc(2 * var(--white-key-width-desktop) - var(--black-key-width-desktop) * 0.5); }
+.black-key[data-offset="3"] { left: calc(4 * var(--white-key-width-desktop) - var(--black-key-width-desktop) * 0.5); }
+.black-key[data-offset="4"] { left: calc(5 * var(--white-key-width-desktop) - var(--black-key-width-desktop) * 0.5); }
+.black-key[data-offset="5"] { left: calc(6 * var(--white-key-width-desktop) - var(--black-key-width-desktop) * 0.5); }
+
+.black-key[data-octave] {
+  /* Will be positioned via inline style from JS */
+}
+
+/* Footer */
+.footer {
+  background: var(--glass-bg);
+  backdrop-filter: var(--backdrop-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 15px;
+  box-shadow: var(--glass-shadow);
+}
+
+.keyboard-hints {
+  text-align: center;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+/* Mobile Responsive (< 768px) */
+@media (max-width: 767px) {
+  .header h1 {
+    font-size: 1.4rem;
+  }
+
+  .controls {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .control-group {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .piano-container {
+    padding: 10px;
+  }
+
+  .ribbon-container {
+    padding: 8px 10px;
+  }
+
+  .octave-display {
+    font-size: 0.95rem;
+    min-width: 100px;
+  }
+
+  .nav-btn {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+
+  .keyboard {
+    height: var(--white-key-height-mobile);
+  }
+
+  .white-key {
+    width: var(--white-key-width-mobile);
+    height: var(--white-key-height-mobile);
+    margin: 0 1px;
+  }
+
+  .black-keys-container {
+    height: var(--black-key-height-mobile);
+  }
+
+  .black-key {
+    width: var(--black-key-width-mobile);
+    height: var(--black-key-height-mobile);
+  }
+
+  /* Mobile black key positioning */
+  .black-key[data-offset="0"] { left: calc(var(--white-key-width-mobile) - var(--black-key-width-mobile) * 0.5); }
+  .black-key[data-offset="1"] { left: calc(2 * var(--white-key-width-mobile) - var(--black-key-width-mobile) * 0.5); }
+  .black-key[data-offset="3"] { left: calc(4 * var(--white-key-width-mobile) - var(--black-key-width-mobile) * 0.5); }
+  .black-key[data-offset="4"] { left: calc(5 * var(--white-key-width-mobile) - var(--black-key-width-mobile) * 0.5); }
+  .black-key[data-offset="5"] { left: calc(6 * var(--white-key-width-mobile) - var(--black-key-width-mobile) * 0.5); }
+
+  .keyboard-hints {
+    font-size: 0.75rem;
+  }
+}
+
+/* Animation for key press */
+@keyframes keyPress {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(2px); }
+  100% { transform: translateY(0); }
+}
+
+.white-key.active,
+.black-key.active {
+  animation: keyPress 0.1s ease-out;
+}
+
+/* Swipe indicator */
+.ribbon-container.swiping {
+  opacity: 0.7;
+  transform: scale(0.98);
+}

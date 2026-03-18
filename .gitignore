@@ -1,0 +1,7 @@
+# Ignore all node_modules folders in this repo (including nested ones)
+node_modules/
+
+# If you want to ignore other package manager caches, add them here:
+# .npm/
+# .yarn/
+# .pnpm-store/
