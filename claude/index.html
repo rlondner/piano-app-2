@@ -208,7 +208,7 @@
   <h1>Glassmorphism Piano</h1>
   <select id="presetSelect" aria-label="Instrument preset"></select>
   <button id="feedbackBtn" title="Toggle visual feedback">Feedback: Color</button>
-  <button id="inputModeBtn" title="Toggle input mode">Input: Mouse</button>
+  <button id="inputModeBtn" title="Toggle input mode">Input: Keyboard</button>
   <button id="recordBtn" title="Record audio">Record</button>
 </header>
 
@@ -226,7 +226,7 @@
   </div>
 </div>
 
-<p class="hint" id="hint">Press A–J for white keys, W/E/T/Y/U for black keys. Arrow keys to change octave.</p>
+<p class="hint" id="hint">White: A–J + K L ; ' \ &nbsp; Black: W E T Y U + I O P [ &nbsp; Arrows: change octave.</p>
 
 <script src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.js"></script>
 <script>
@@ -250,8 +250,27 @@
   const BASE_OCTAVE = 2; // C2 through B6
 
   const KEYBOARD_MAP = {
-    'a':'C', 'w':'C#', 's':'D', 'e':'D#', 'd':'E',
-    'f':'F', 't':'F#', 'g':'G', 'y':'G#', 'h':'A', 'u':'A#', 'j':'B'
+    // First octave (home row = white, QWERTY row = black)
+    'a': { note: 'C', oct: 0 }, 'w': { note: 'C#', oct: 0 },
+    's': { note: 'D', oct: 0 }, 'e': { note: 'D#', oct: 0 },
+    'd': { note: 'E', oct: 0 },
+    'f': { note: 'F', oct: 0 }, 't': { note: 'F#', oct: 0 },
+    'g': { note: 'G', oct: 0 }, 'y': { note: 'G#', oct: 0 },
+    'h': { note: 'A', oct: 0 }, 'u': { note: 'A#', oct: 0 },
+    'j': { note: 'B', oct: 0 },
+    // Second octave (K onwards)
+    'k': { note: 'C', oct: 1 }, 'o': { note: 'C#', oct: 1 },
+    'l': { note: 'D', oct: 1 }, 'p': { note: 'D#', oct: 1 },
+    ';': { note: 'E', oct: 1 },
+    "'": { note: 'F', oct: 1 }, ']': { note: 'F#', oct: 1 },
+    '\\': { note: 'G', oct: 1 }
+  };
+
+  // Fallback: physical key codes for punctuation keys that may be dead keys
+  // on international keyboards (e.g. ' is a dead key in some layouts)
+  const CODE_TO_KEY = {
+    'Semicolon': ';', 'Quote': "'",
+    'BracketLeft': '[', 'Backslash': '\\', 'BracketRight': ']'
   };
 
   // ── State ──────────────────────────────────────────────────
@@ -260,13 +279,13 @@
   let effectsChain = [];
   let visibleOctaves = 2;
   let startOctaveIdx = 0;
-  let inputMode = 'mouse'; // 'mouse' | 'keyboard'
+  let inputMode = 'keyboard'; // 'mouse' | 'keyboard'
   let feedbackMode = 'color'; // 'color' | 'depress'
   let recording = false;
   let mediaRecorder = null;
   let recordedChunks = [];
   const activePointers = new Map(); // pointerId -> noteString
-  const activeKeys = new Set(); // keyboard keys currently held
+  const activeKeys = new Map(); // keyboard key -> noteString currently sounding
 
   // ── DOM refs ───────────────────────────────────────────────
   const overlay = document.getElementById('overlay');
@@ -595,23 +614,32 @@
     if (e.key === 'ArrowLeft') { navigateOctave(-1); return; }
     if (e.key === 'ArrowRight') { navigateOctave(1); return; }
 
-    const noteName = KEYBOARD_MAP[e.key.toLowerCase()];
-    if (!noteName) return;
+    let k = e.key.toLowerCase();
+    if (!KEYBOARD_MAP[k] && CODE_TO_KEY[e.code]) k = CODE_TO_KEY[e.code];
+    const mapping = KEYBOARD_MAP[k];
+    if (!mapping) return;
     e.preventDefault();
-    if (activeKeys.has(e.key.toLowerCase())) return;
-    activeKeys.add(e.key.toLowerCase());
-    const octNum = BASE_OCTAVE + startOctaveIdx;
-    noteOn(noteName + octNum);
+    if (activeKeys.has(k)) return;
+    const octNum = BASE_OCTAVE + startOctaveIdx + mapping.oct;
+    if (octNum > BASE_OCTAVE + TOTAL_OCTAVES - 1) return;
+    const noteStr = mapping.note + octNum;
+    activeKeys.set(k, noteStr);
+    noteOn(noteStr);
   });
 
   document.addEventListener('keyup', e => {
     if (inputMode !== 'keyboard') return;
-    const k = e.key.toLowerCase();
-    const noteName = KEYBOARD_MAP[k];
-    if (!noteName) return;
+    let k = e.key.toLowerCase();
+    if (!activeKeys.has(k) && CODE_TO_KEY[e.code]) k = CODE_TO_KEY[e.code];
+    const noteStr = activeKeys.get(k);
+    if (!noteStr) return;
     activeKeys.delete(k);
-    const octNum = BASE_OCTAVE + startOctaveIdx;
-    noteOff(noteName + octNum);
+    noteOff(noteStr);
+  });
+
+  window.addEventListener('blur', () => {
+    for (const noteStr of activeKeys.values()) noteOff(noteStr);
+    activeKeys.clear();
   });
 
   // ── Ribbon Navigation ─────────────────────────────────────
@@ -657,10 +685,7 @@
     // Release all active notes first
     activePointers.forEach((note) => noteOff(note));
     activePointers.clear();
-    activeKeys.forEach(k => {
-      const noteName = KEYBOARD_MAP[k];
-      if (noteName) noteOff(noteName + (BASE_OCTAVE + startOctaveIdx));
-    });
+    activeKeys.forEach((noteStr) => noteOff(noteStr));
     activeKeys.clear();
 
     inputMode = inputMode === 'mouse' ? 'keyboard' : 'mouse';
