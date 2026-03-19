@@ -1,15 +1,12 @@
 {
-  "name": "claude",
+  "name": "glassmorphism-piano",
   "version": "1.0.0",
-  "main": "index.js",
+  "private": true,
+  "description": "5-octave glassmorphism web piano synth",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test.mjs"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "puppeteer": "^24.39.1"
+  "devDependencies": {
+    "puppeteer": "^23.0.0"
   }
 }
